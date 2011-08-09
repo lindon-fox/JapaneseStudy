@@ -25,6 +25,10 @@ def interact( p, expr ): # MecabProc -> Str -> IO Str
     p.stdin.flush()
     return u'\r'.join( [ unicode( p.stdout.readline().rstrip( '\r\n' ), 'euc-jp' ) for l in expr.split('\n') ] )
 
+def getMorphemesAndPreserveContext( p, e, ws=None, bs=None ):
+    ms = [ tuple( m.split('\t') ) for m in interact( p, e ).split('\r') ] # morphemes
+    return ms
+
 # MecabProc -> Str -> Maybe PosWhiteList -> Maybe PosBlackList -> IO [Morpheme]
 def getMorphemes( p, e, ws=None, bs=None ):
     ms = [ tuple( m.split('\t') ) for m in interact( p, e ).split('\r') ] # morphemes
@@ -95,6 +99,10 @@ def analyze2str( ms ):
 By part of spech:
 %s
 ''' % ( d['count'], posStr )
+
+def file2MorphemeWords( path, ws=None, bs=[u'記号'] ): # bs filters punctuation
+    inp = unicode( open( path, 'r' ).read(), 'utf-8' )
+    return getMorphemesAndPreserveContext( inp, ws, bs)
 
 def file2ms( path, ws=None, bs=[u'記号'] ): # bs filters punctuation
     inp = unicode( open( path, 'r' ).read(), 'utf-8' )

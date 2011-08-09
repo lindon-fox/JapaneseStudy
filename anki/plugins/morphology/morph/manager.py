@@ -28,6 +28,9 @@ class MorphMan( QDialog ):
         grid = QGridLayout( self )
         vbox = QVBoxLayout()
 
+        #Space sentences action
+        self.spaceSentencesFromFile = mkBtn( 'Create "words" from sentence file', self.onCreateWordsFromFile, self, vbox )
+
         # Extract from txt file
         self.exportTxtFileBtn = mkBtn( 'Export morphemes from file', self.onExportTxtFile, self, vbox )
 
@@ -67,6 +70,18 @@ class MorphMan( QDialog ):
         grid.addLayout( vbox, 0, 0 )
         grid.addWidget( self.morphDisplay, 0, 1 )
         grid.addWidget( self.analysisDisplay, 0, 2 )
+
+    def onCreateWordsFromFile( self ):
+        sourcePath = QFileDialog.getOpenFileName( caption='Text file to get sentences from', directory=util.dbPath )
+        if not sourcePath:
+            return
+        destinationPath = QFileDialog.getSaveFileName( caption='Save the output to?' directory=util.dbPath + 'output.txt' )
+        if not destinationPath:
+            return
+        ##get the spaced contents - This has the potential of being huge...
+        ms = M.file2MorphemeWords( sourcePath )
+        M.saveWordsWithSpaces( ms, destinationPath )
+        QMessageBox.information( mw, 'OK...', 'Enjoy' )
 
     def onExportTxtFile( self ):
         srcPath = QFileDialog.getOpenFileName( caption='Text file to export from?', directory=util.dbPath )

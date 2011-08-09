@@ -12,5 +12,5 @@ def morphInit():
    import morph.manager
    import morph.massTagger
 
-mw.registerPlugin( 'Morphology', 20110505213517 )
+mw.registerPlugin( 'Morphology - spaced out', 20110105213517 )
 addHook( 'init', morphInit )
